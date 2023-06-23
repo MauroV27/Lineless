@@ -1,23 +1,50 @@
+import pkg from 'express';
+const { Request, Response } = pkg;
+
 export class OrganizerController{
 
+    /**
+     * Register a user like a organizer
+     * @param {Request} req 
+     * @param {Response} res 
+     */
+    registerOrganizer(req, res){
+        res.status(200).json({message:"Success in register organizer", data:null, status:"OK"});
+    }
 
-    registerOrganizer(){}
+    createEvent(req, res){
+        res.status(200).json({message:"Success in create event", data:null, status:"OK"});
+    }
 
-    createEvent(){}
+    updateEvent(req, res){
+        res.status(200).json({message:"Success in update event", data:null, status:"OK"});
+    }
 
-    updateEvent(){}
+    registerSellerInEvent(req, res){
+        res.status(200).json({message:"Success in register seller", data:null, status:"OK"});
+    }
 
-    getSellersInEvent(){}
+    getSellersInEvent(req, res){
+        res.status(200).json({message:"Get sellers in event", data:[], status:"OK"});
+    }
 
-    registerSellerInEvent(){}
+    getSellerInEvent(req, res){
+        res.status(200).json({message:"Get seller in even", data:null, status:"OK"});
+    }
 
-    getSellerInEvent(){}
+    removeSellerInEvent(req, res){
+        res.status(200).json({message:"Success in remove seller", data:null, status:"OK"});
+    }
 
-    removeSellerInEvent(){}
+    addProductInEvent(req, res){
+        res.status(200).json({message:"Success in add product in event", data:null, status:"OK"});
+    }
 
-    addProductInEvent(){}
+    updateProductInEvent(req, res){
+        res.status(200).json({message:"Success in update product in event", data:null, status:"OK"});
+    }
 
-    updateProductInEvent(){}
-
-    removeProductInEvent(){}
+    removeProductInEvent(req, res){
+        res.status(200).json({message:"Success in remove product in event", data:null, status:"OK"});
+    }
 }

@@ -1,4 +1,4 @@
-import { EventController } from "../Controllers/Events";
+import { EventController } from "../Controllers/Events.js";
 
 const eventConnect = new EventController();
 
@@ -15,14 +15,14 @@ export function connectEventsRoutes(router) {
     // (get) /event/order -> Cliente recebe estado dos pedido
     // (del) /event/order -> Cancela o pedido feito ( Será que precisa? )
 
-    router.post('/event/complaint/', eventConnect.createSale);
+    router.post('/event/complaint/', eventConnect.complaint);
 
     router.get('/event/products', eventConnect.getProducts );
     router.get('/event/products/product', eventConnect.getProduct);
 
-    router.get('/event', eventConnect.getCurentlyEvents );
+    router.get('/event', eventConnect.getAllOngoingEvents );
     
     router.post('/event/order', eventConnect.createOrder );
     router.get('/event/order', eventConnect.getOrder );
-    router.del('/event/order', eventConnect.cancelOrder );
+    router.delete('/event/order', eventConnect.cancelOrder );
 }

@@ -1,4 +1,4 @@
-import { OrganizerController } from "../Controllers/Organizer";
+import { OrganizerController } from "../Controllers/Organizer.js";
 
 const organizerConnect = new OrganizerController();
 
@@ -28,10 +28,10 @@ export function connectOrganizersRoutes(router) {
     
     router.post('/organizer/seller', organizerConnect.registerSellerInEvent );
     router.get('/organizer/seller', organizerConnect.getSellerInEvent );
-    router.del('/organizer/seller', organizerConnect.removeSellerInEvent );
+    router.delete('/organizer/seller', organizerConnect.removeSellerInEvent );
 
     router.post('/organizer/product/', organizerConnect.addProductInEvent );
     router.put('/organizer/product/', organizerConnect.updateProductInEvent );
-    router.del('/organizer/product/', organizerConnect.removeProductInEvent );
+    router.delete('/organizer/product/', organizerConnect.removeProductInEvent );
 
 }

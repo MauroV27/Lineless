@@ -1,4 +1,4 @@
-import { UserController } from "../Controllers/User";
+import { UserController } from "../Controllers/User.js";
 
 const userConnect = new UserController();
 

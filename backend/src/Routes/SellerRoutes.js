@@ -1,4 +1,4 @@
-import { SellerController } from "../Controllers/Seller";
+import { SellerController } from "../Controllers/Seller.js";
 
 const sellerConnect = new SellerController();
 
@@ -16,5 +16,5 @@ export function connectSellersRoutes(router) {
 
     router.get('/seller/orders', sellerConnect.getOrders );
     router.put('/seller/orders/order', sellerConnect.updateOrder );
-    router.del('/seller/orders/order', sellerConnect.deleteOrder );
+    router.delete('/seller/orders/order', sellerConnect.deleteOrder );
 }

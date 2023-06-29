@@ -7,10 +7,11 @@ export class EventDAO {
         // [TODO] : Not complete yet
 
         const eventConstructor = {
-            "name" : eventData.name,
-            "description" : eventData.description,
-            "organizers" : eventData.organizers,
-            "sellers" : eventData.sellers
+            name : eventData.name,
+            description : eventData.description,
+            organizers : eventData.organizers,
+            sellers : eventData.sellers,
+            products : []
         }
 
         const db = new ConnectDB();
@@ -57,7 +58,6 @@ export class EventDAO {
         }
 
         return null;
-
     }
 
 }

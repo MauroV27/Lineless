@@ -28,13 +28,21 @@ export class OrganizerController{
 
     async createEvent(req, res){
         // [ISSUE] : need be tested...
-        const eventWasCreated = await eventDAO.create( req.body );
+        const { name, description, organizer, sellers, products} = req.body;
 
-        if ( eventWasCreated.data == null ){
-            res.status(400).json(eventWasCreated);
+        const isOrganizerValid = await userDAO.isUserOrganizer( organizer );
+
+        if ( isOrganizerValid.data == false ){
+            return res.status(400).json(isOrganizerValid);
         }
 
-        res.status(200).json(eventWasCreated);
+        const eventWasCreated = await eventDAO.create( name, description, organizer, sellers, products );
+
+        if ( eventWasCreated.data == null ){
+            return res.status(400).json(eventWasCreated);
+        }
+
+        return res.status(200).json(eventWasCreated);
     }
 
     updateEvent(req, res){

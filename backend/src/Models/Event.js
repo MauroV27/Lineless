@@ -5,34 +5,33 @@ import * as Validater from '../Utils/validateData.js';
 
 export class EventDAO {
 
-    async create( eventData ){
+    async create( name, description, organizer, sellers, products ){
 
-        if ( Validater.isStringValue(eventData.name) || Validater.isExpectedArray(eventData.organizers, 1) ){
+        if ( Validater.isStringValue(name) || Validater.isStringValue(organizer) ){
             return {data:null, status:"ERROR", message: "Data entry failure"};
         }
         
         const eventConstructor = {
-            name : eventData.name,
-            description : Validater.convertEmptyValueToString(eventData.description),
-            organizers : eventData.organizers,
-            sellers : Validater.changeUnknownValueToArray(eventData.sellersList),
-            products : Validater.changeUnknownValueToArray(eventData.productList)
+            name : name,
+            description : Validater.convertEmptyValueToString(description),
+            organizers : organizer,
+            sellers : Validater.changeUnknownValueToArray(sellers),
+            products : Validater.changeUnknownValueToArray(products)
         }
 
         const db = new ConnectDB();
         const eventRef = collection(db, 'events');
 
-        const result = await addDoc(eventRef, eventConstructor)
-            .then( doc => {
-                const data = {...doc.data(), id: doc.id}
+        const result = await addDoc(eventRef, eventConstructor).then( doc => {
+                const data = {id: doc.id, ...eventConstructor };
 
                 return { data, status: 'OK', message : "Success in create event" }
             })
             .catch( (error => {
-                return { data : null, status : 'ERROR', message : error }
-            })
-        );
-
+                return { data : null, status : 'ERROR', message : "|-" + error }
+            }));
+        
+        console.log( "event result: ", result);
         return result;
     }
 
@@ -52,6 +51,10 @@ export class EventDAO {
     }
 
     async getEvent( eventID ){
+
+        if ( Validater.isStringValue(eventID) ){
+            return {data:null, status:"ERROR", message: "Data entry failure"};
+        }
 
         const db = new ConnectDB();
 

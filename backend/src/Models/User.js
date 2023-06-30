@@ -108,6 +108,27 @@ export class UserDAO {
         return result;
     }
 
+    async isUserOrganizer( userID ){
+        if ( this.#checkInputText(userID) ){
+            return { data:false, status:"ERROR", message:"Data entry failure" };
+        }
+
+        const db = new ConnectDB();
+
+        const userRef = doc(db, "users", userID);
+        const userSnap = await getDoc( userRef );
+
+        if ( userSnap.exists() == false ){
+            return {data:false, status:"ERROR", message:"User not found"};
+        }
+        
+        if ( userSnap.data()?.organizer ){
+            return {data:true, status:"OK", message:"User is organizer"};
+        }
+
+        return {data:false, status:"ERROR", message:"User is not organizer"};
+    }
+
     // Private methods ----------------------------------------
 
     // Private methods to access database
@@ -170,7 +191,7 @@ export class UserDAO {
     }
 
     #checkInputText( inputData ){
-        return inputData == "" || inputData == null || inputData == undefined
+        return inputData == null || inputData == undefined || inputData == "";
     }
 
 }

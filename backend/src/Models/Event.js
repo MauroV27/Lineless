@@ -1,17 +1,22 @@
 import { ConnectDB } from '../DB/connectDB.js';
-import { collection, getDocs, doc, getDoc, addDoc, query, updateDoc } from 'firebase/firestore/lite';
+import { collection, getDocs, doc, getDoc, addDoc, query, updateDoc } from 'firebase/firestore';
+
+import * as Validater from '../Utils/validateData.js';
 
 export class EventDAO {
 
     async create( eventData ){
-        // [TODO] : Not complete yet
 
+        if ( Validater.isStringValue(eventData.name) || Validater.isExpectedArray(eventData.organizers, 1) ){
+            return {data:null, status:"ERROR", message: "Data entry failure"};
+        }
+        
         const eventConstructor = {
             name : eventData.name,
-            description : eventData.description,
+            description : Validater.convertEmptyValueToString(eventData.description),
             organizers : eventData.organizers,
-            sellers : eventData.sellers,
-            products : []
+            sellers : Validater.changeUnknownValueToArray(eventData.sellersList),
+            products : Validater.changeUnknownValueToArray(eventData.productList)
         }
 
         const db = new ConnectDB();
@@ -19,7 +24,7 @@ export class EventDAO {
 
         const result = await addDoc(eventRef, eventConstructor)
             .then( doc => {
-                const data = {name: doc.name, id: doc.id}
+                const data = {...doc.data(), id: doc.id}
 
                 return { data, status: 'OK', message : "Success in create event" }
             })
@@ -50,7 +55,7 @@ export class EventDAO {
 
         const db = new ConnectDB();
 
-        const eventRef = doc(db, 'events', eventID);
+        const eventRef = doc(db, "events", eventID);
         const eventSnap = await getDoc(eventRef);
 
         if ( eventSnap.exists() ){

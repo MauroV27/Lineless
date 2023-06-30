@@ -82,7 +82,7 @@ export class EventController {
 
         const { eventID } = req.body;
 
-        const eventExist = await this.#eventExist( eventID );
+        const eventExist = await eventDAO.getEvent( eventID );
 
         if ( eventExist.data == null ){
             return res.status(500).json( eventExist );

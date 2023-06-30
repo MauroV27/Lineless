@@ -20,7 +20,8 @@ export function connectEventsRoutes(router) {
     router.get('/event/products', eventConnect.getProducts );
     router.get('/event/products/product', eventConnect.getProduct);
 
-    router.get('/event', eventConnect.getAllOngoingEvents );
+    router.get('/events', eventConnect.getAllOngoingEvents );
+    router.get('/event', eventConnect.getEvent );
     
     router.post('/event/order', eventConnect.createOrder );
     router.get('/event/order', eventConnect.getOrder );

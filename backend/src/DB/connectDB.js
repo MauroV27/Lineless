@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = JSON.parse( process.env.FIREBASE_SERVICE_ACCOUNT_KEY );
 
@@ -25,7 +25,7 @@ export class ConnectDB {
                 ConnectDB.instance = db;
 
             } catch (err) {
-                console.log("[ERROR] : Failed to connect with firebase service");
+                console.log("[ERROR] : Failed to connect with firebase service --");
                 throw err;
             }
         }

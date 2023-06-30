@@ -1,5 +1,6 @@
 import { ConnectDB } from '../DB/connectDB.js';
-import { collection, getDocs, doc, getDoc, addDoc, query, updateDoc } from 'firebase/firestore/lite';
+import { collection, where, getDocs, doc, getDoc, addDoc, query, updateDoc } from 'firebase/firestore';
+// import { where } from 'firebase/firestore';
 
 export class UserDAO {
 
@@ -10,6 +11,7 @@ export class UserDAO {
         }
 
         const db = new ConnectDB();
+        const usersRef = collection(db, 'users');
 
         const userConstructor = {
             username : userData.username,
@@ -18,22 +20,18 @@ export class UserDAO {
             name     : userData.name
         }
 
-        this.#checkUserExists(userConstructor.username, userConstructor.email, db)
-            .then((exists) => {
-                if (exists) {
-                    return { data : null, status : 'ERROR', message : "User already exists!" }
-                }
-            })
-            .catch((error) => {
-                console.error('Erro ao verificar usuário:', error);
-            });
+        const userExists = this.#checkUserExists(userConstructor.username, userConstructor.email, usersRef);
 
-        const userRef = collection(db, 'users');
-        const result = await addDoc(userRef, userConstructor)
+        if ( userExists ){
+            return { data : null, status : 'ERROR', message : "User already exists!" };
+        }
+        
+        const result = await addDoc(usersRef, userConstructor)
             .then( doc => {
-                const data = {name: doc.name, email: doc.email, username: doc.username, userID: doc.id}
+                const {name, email, username } = doc.data();
+                const data = {name, email, username, userID: doc.id};
 
-                return { data, status: 'OK', message : "Success in create event" }
+                return { data, status: 'OK', message : "Success in create user" }
             })
             .catch( (error => {
                 return { data : null, status : 'ERROR', message : error }
@@ -51,34 +49,30 @@ export class UserDAO {
 
     /**
      * Validate login data ( username, password, userID)
-     * @param {Object} loginData 
-     * @returns {boolean}
      */
-    async validateLogin( loginData ){
-        // [TODO] : needs to be implemented
-        const { username, password, email } = loginData;
-
-        if ( this.#checkInputText( password) || this.#checkInputText( email) || this.#checkInputText( username) ) {
+    async validateLogin( username, password ){
+        
+        if ( this.#checkInputText( password) || this.#checkInputText( username) ) {
             return { data : null, status : 'ERROR', message : "Data entry failure" };
         }
-
-        const db = new ConnectDB();
-
-        const userRef = collection(db, 'users');
-        const userSnap = await getDoc(userRef);
-
-        if ( userSnap.exists() == false ){
+        
+        const userData = await this.#findUserByProperite(username, "username");
+        
+        if ( userData == null || userData == undefined ){
             return { data : null, status : 'ERROR', message : "User not found!" };
         }
-
-        const userData = userSnap.data();
 
         if ( userData.password == null || userData.password == undefined || userData.password == "" ){
             return { data : null, status : 'ERROR', message : "Faill to load data" };
         }
 
         const passwordIsValid = await this.#comparePassword( password, userData.password );
-        return passwordIsValid;
+
+        if ( passwordIsValid ){
+            return { data : { userID: userData.id }, status : 'OK', message : "Success in validate login" };
+        } 
+            
+        return { data : null, status : 'OK', message : "Login is invalid" };   
     }
 
     async delete( userAccountToDelete ){
@@ -89,16 +83,49 @@ export class UserDAO {
 
     // Private methods to access database
 
-    async #checkUserExists( username, email, db ){
+    async #checkUserExists( username, email, usersRef ){
         // const db = new ConnectDB();
 
-        const usersRef = db.collection('users');
-        const querySnapshot = await usersRef
-          .where('name', '==', username)
-          .where('email', '==', email)
-          .get();
-      
-        return !querySnapshot.empty;
+        // const usersRef = collection(db, 'users');
+        const existsUsername = query( usersRef, where('username', '==', username));
+        const usernameSnap = await getDocs(existsUsername);
+
+        if ( usernameSnap.empty == false ){
+            return true;
+        }
+
+        const existsEmail = query( usersRef, where('email', '==', email));
+        const userEmailSnap = await getDocs(existsEmail);
+
+        if ( userEmailSnap.empty == false ){
+            return true;
+        }
+
+        return false;
+    }
+
+    async #findUserByProperite( value, propertie ){
+
+        const db = new ConnectDB();
+        const usersRef = collection(db, 'users');
+        
+        const querySnapshot = query( usersRef, where(propertie, "==", value));
+        
+        const userSnap = await getDocs(querySnapshot)
+
+        if ( userSnap == null || userSnap.exists == false || userSnap == undefined ){
+            return null;
+        }
+        let userdata = null;
+        
+        userSnap.forEach( doc => {
+            // doc.data() is never undefined for query doc snapshots
+            // console.log(doc.id, " => ", doc.data());
+            const { password } = doc.data();
+            userdata = { password, id: doc.id };
+        });
+
+        return userdata;
     }
 
     // Private methods for validate data

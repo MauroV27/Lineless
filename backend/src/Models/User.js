@@ -79,6 +79,35 @@ export class UserDAO {
         // [TODO] : needs to be implemented
     }
 
+    async registerUserAsOrganizer( userID ){
+        if ( this.#checkInputText(userID) ){
+            return { data:null, status:"ERROR", message:"Data entry failure" };
+        }
+
+        const db = new ConnectDB();
+
+        const userRef = doc(db, "users", userID);
+        const userSnap = await getDoc( userRef );
+
+        if ( userSnap.exists() == false ){
+            return {data:null, status:"ERROR", message:"User not found"};
+        }
+
+        const dataToUpdate = {
+            organizer : true,
+        }
+
+        const result = await updateDoc(userRef, dataToUpdate)
+            .then( docRef => {
+                return {data: dataToUpdate, status:"OK", message:"Success in register user as organzier."}
+            })
+            .catch( error => {
+                return {data:null, status:"ERROR", message:"Failed in register user as organzier."}
+            })
+        
+        return result;
+    }
+
     // Private methods ----------------------------------------
 
     // Private methods to access database

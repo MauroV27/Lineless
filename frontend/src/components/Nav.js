@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons'
 import Cart from './cart/Cart';
 import CartContext from '../context/CartContext';
-import logo from '../images/lineless_logo_white.jpg'
+import logo from '../images/lineless_logo_white_h.jpg'
 
 const Nav = () => {
   const { cart } = useContext(CartContext);
@@ -22,7 +22,7 @@ const Nav = () => {
   return (
     <Navbar>
       <NavbarBrand href="/">
-        <img src={logo} width={103} height={122.5} alt="Logo" />
+        <img src={logo} width={903} height={209} alt="Logo" />
       </NavbarBrand>
       <Button onClick={toggleModal} color="primary">
         <FontAwesomeIcon icon={faCartArrowDown} />

@@ -2,8 +2,10 @@ import pkg from 'express';
 const { Request, Response } = pkg;
 
 import { UserDAO } from '../Models/User.js';
+import { SessionDAO } from '../Models/Session.js';
 
 const userDAO = new UserDAO();
+const sessionDAO = new SessionDAO();
 
 export class UserController{
  
@@ -37,8 +39,25 @@ export class UserController{
             return res.status(500).json(userIsValid)
         }
 
-        return res.status(200).json(userIsValid);
-        // res.status(200).json({message:"Success in login account", data:{token:"randomToken"}, status:"OK"});
+        const userSession = await sessionDAO.addUserSession( userIsValid.data.userID );
+
+        if ( userSession.data == null ){
+            return res.status(500).json(userSession)
+        }
+
+        return res.status(200).json(userSession);
+    }
+
+    async getUserBySession( req, res ){
+        const { sessionID } = req.body;
+
+        const userSession = await sessionDAO.getUserSession( sessionID );
+
+        if ( userSession.data == null ){
+            return res.status(500).json(userSession)
+        }
+
+        return res.status(200).json(userSession);
     }
 
     /**

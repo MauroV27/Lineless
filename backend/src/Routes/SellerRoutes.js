@@ -14,6 +14,7 @@ export function connectSellersRoutes(router) {
 
     router.post('/seller/register', sellerConnect.registerSeller );
 
+    router.get('/seller/order', sellerConnect.getOrder );
     router.get('/seller/orders', sellerConnect.getOrders );
     router.put('/seller/orders/order', sellerConnect.updateOrder );
     router.delete('/seller/orders/order', sellerConnect.deleteOrder );

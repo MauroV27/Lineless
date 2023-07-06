@@ -20,7 +20,7 @@ export class UserDAO {
             name     : userData.name
         }
 
-        const userExists = this.#checkUserExists(userConstructor.username, userConstructor.email, usersRef);
+        const userExists = await this.#checkUserExists(userConstructor.username, userConstructor.email, usersRef);
 
         if ( userExists ){
             return { data : null, status : 'ERROR', message : "User already exists!" };
@@ -34,7 +34,9 @@ export class UserDAO {
                 return { data, status: 'OK', message : "Success in create user" }
             })
             .catch( (error => {
-                return { data : null, status : 'ERROR', message : error }
+                if ( error ) {
+                    return { data : null, status : 'ERROR', message : error }
+                }
             })
         );
 
@@ -127,6 +129,56 @@ export class UserDAO {
         }
 
         return {data:false, status:"ERROR", message:"User is not organizer"};
+    }
+
+    async registerUserAsSeller( userID ){
+        if ( this.#checkInputText(userID) ){
+            return { data:null, status:"ERROR", message:"Data entry failure" };
+        }
+
+        const db = new ConnectDB();
+
+        const userRef = doc(db, "users", userID);
+        const userSnap = await getDoc( userRef );
+
+        if ( userSnap.exists() == false ){
+            return {data:null, status:"ERROR", message:"User not found"};
+        }
+
+        const dataToUpdate = {
+            seller : true,
+        }
+
+        const result = await updateDoc(userRef, dataToUpdate)
+            .then( docRef => {
+                return {data: dataToUpdate, status:"OK", message:"Success in register user as seller."}
+            })
+            .catch( error => {
+                return {data:null, status:"ERROR", message:"Failed in register user as seller."}
+            })
+        
+        return result;
+    }
+
+    async isUserSeller( userID ){
+        if ( this.#checkInputText(userID) ){
+            return { data:false, status:"ERROR", message:"Data entry failure" };
+        }
+
+        const db = new ConnectDB();
+
+        const userRef = doc(db, "users", userID);
+        const userSnap = await getDoc( userRef );
+
+        if ( userSnap.exists() == false ){
+            return {data:false, status:"ERROR", message:"User not found"};
+        }
+        
+        if ( userSnap.data()?.seller ){
+            return {data:true, status:"OK", message:"User is seller"};
+        }
+
+        return {data:false, status:"ERROR", message:"User is not seller"};
     }
 
     // Private methods ----------------------------------------

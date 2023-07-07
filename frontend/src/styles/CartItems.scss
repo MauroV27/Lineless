@@ -1,0 +1,25 @@
+.delete-item {
+    height: 35px;
+}
+
+.cart-item-name{
+    padding-bottom: 5px;
+}
+
+.quantity-group {
+    display: flex;
+
+    .quan-buttons {
+        width: 50px;
+        margin: 0 !important;
+    }
+
+    .input-quantity {
+        width: 40px;
+        margin: 0 3px;
+    }
+}
+
+.item-total {
+    margin: 0 !important;
+}

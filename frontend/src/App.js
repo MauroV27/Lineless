@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import Nav from './components/Nav';
-import ProductList from './components/ProductList';
-import CartContext from './context/CartContext';
-import { commerce } from './lib/Commerce';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Products } from './pages/Products';
+import { Home } from './pages/Home';
 
 function App() {
-  const [cart, setCart] = useState();
-
-  useEffect(() => {
-    commerce.cart.retrieve()
-      .then(cart => {
-        setCart(cart);
-      })
-  }, [])
-
-  return (
-    <div className="container">
-      <CartContext.Provider value={{cart, setCart}}>
-        <Nav />
-        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}} className="container">
-          <h2>Produtos</h2>
-        </div>
-        <ProductList />
-      </CartContext.Provider>
-    </div>
-  );
+    return (
+        <>
+            <Router>
+                <Switch>
+                    {/* <Route path='/' component={Home} /> */}
+                    <Route path='/products' component={Products} />
+                </Switch>
+            </Router>
+        </>
+    );
 }
 
 export default App;

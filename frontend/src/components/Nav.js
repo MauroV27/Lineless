@@ -1,41 +1,42 @@
-import React, { useState, useContext } from 'react';
-import {
-  Navbar,
-  NavbarBrand,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons'
-import Cart from './cart/Cart';
-import CartContext from '../context/CartContext';
-import logo from '../images/lineless_logo_white_h.jpg'
+import React from 'react';
+import { Menu, Image, Icon, Segment, Modal} from 'semantic-ui-react'
+import logo from '../img/logo-h.png'
 
-const Nav = () => {
-  const { cart } = useContext(CartContext);
-  const [modal, setModal] = useState(false);
-  const toggleModal = () => setModal(!modal);
+import CartModal from './CartModal'
 
-  let cartItems = cart && cart.total_unique_items > 0 ? cart.total_unique_items : '';
-  return (
-    <Navbar>
-      <NavbarBrand href="/">
-        <img src={logo} width={903} height={209} alt="Logo" />
-      </NavbarBrand>
-      <Button onClick={toggleModal} color="primary">
-        <FontAwesomeIcon icon={faCartArrowDown} />
-        <span className="icon-button-text-right">{cartItems}</span>
-      </Button>
-      <Modal isOpen={modal} toggle={toggleModal}>
-      <ModalHeader toggle={toggleModal}>Carrinho</ModalHeader>
-        <ModalBody>
-          <Cart />
-        </ModalBody>
-      </Modal>
-    </Navbar>
-  )
-}
+const Nav = (props) => {
 
-export default Nav;
+    const iconDisplay = () => {
+
+        if (props.cart && props.cart.total_unique_items > 0) {
+            return(
+                <div className='cartButton'>
+                    <Icon name='shopping cart' size='large'/>
+                    {props.cart.total_unique_items}
+                </div>
+            )
+        } else {
+            return (
+                <Icon name='shopping cart' size='large'/>
+            )
+        }
+    }
+
+
+    return (
+        <Menu className='menu' borderless> 
+            <Segment className='nav-segment'>
+                <Menu.Item>
+                    <Image src={logo} size='small' />
+                </Menu.Item>
+                <Menu.Item position='right' style={{cursor: 'pointer'}}>
+                    <Modal trigger={iconDisplay()} className='cart-modal' closeIcon >
+                        <CartModal cart={props.cart} emptyCart={props.emptyCart}/>
+                    </Modal>
+                </Menu.Item>
+            </Segment>
+        </Menu>
+    );
+};
+
+export default Nav

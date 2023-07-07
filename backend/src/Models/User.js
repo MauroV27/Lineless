@@ -34,8 +34,8 @@ export class UserDAO {
                 return { data, status: 'OK', message : "Success in create user" }
             })
             .catch( (error => {
-                if ( error ) {
-                    return { data : null, status : 'ERROR', message : error }
+                if ( error?.message != null ) {
+                    return { data : null, status : 'ERROR', message : error.message }
                 }
             })
         );

@@ -27,7 +27,9 @@ export class OrderDAO {
                 return { data, status: 'OK', message : "Success in create order" }
             })
             .catch( (error => {
-                return { data : null, status : 'ERROR', message : error }
+                if ( error?.message != null ) {
+                    return { data : null, status : 'ERROR', message : error.message }
+                }
             })
         );
 

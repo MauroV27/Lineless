@@ -1,11 +1,15 @@
 import { EventDAO } from '../Models/Event.js';
+import { OrderDAO } from '../Models/Order.js';
 import { ProductDAO } from '../Models/Product.js';
+
+import { isStringValue, isExpectedArray } from '../Utils/validateData.js';
 
 import pkg from 'express';
 const { Request, Response } = pkg;
 
 const eventDAO = new EventDAO();
 const productDAO = new ProductDAO();
+const orderDAO = new OrderDAO();
 
 export class EventController {
 
@@ -96,8 +100,21 @@ export class EventController {
      * @param {Request} req 
      * @param {Response} res 
      */
-    createOrder( req, res ){
-        res.status(200).json({message:"Create order in event", data:null, status:"OK"});
+    async createOrder( req, res ){
+
+        const {userID, sellerID, productsList, eventID} = req.body;
+        console.log("aaa :", userID, sellerID, productsList, eventID)
+        if ( isStringValue(userID) || isStringValue(sellerID) || isStringValue(eventID) ){//|| isExpectedArray(productsList, 1) ){
+            return res.status(500).json({data:null, status:"ERROR", message:"Data entry failure"});
+        }
+
+        const createOrder = await orderDAO.create(userID, productsList, eventID, sellerID);
+
+        if ( createOrder.data == null ){
+            return res.status(500).json(createOrder)
+        }
+
+        return res.status(200).json(createOrder);
     }
 
     /**

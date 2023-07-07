@@ -25,5 +25,6 @@ export function connectEventsRoutes(router) {
     
     router.post('/event/order', eventConnect.createOrder );
     router.get('/event/order', eventConnect.getOrder );
-    router.delete('/event/order', eventConnect.cancelOrder );
+    router.get('/event/orders', eventConnect.getAllOrders);
+    // router.delete('/event/order', eventConnect.cancelOrder );
 }

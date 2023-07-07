@@ -1,6 +1,8 @@
 import { ConnectDB } from '../DB/connectDB.js';
 import { collection, getDocs, doc, getDoc, addDoc, query, updateDoc, where } from 'firebase/firestore';
 
+import { isStringValue } from '../Utils/validateData.js';
+
 export class OrderDAO {
 
     async create( userID, productIDPriceList, eventID, sellerID){
@@ -64,6 +66,30 @@ export class OrderDAO {
             );
         const sellerEventSnap = await getDocs(existEventSeller);
 
+        if ( sellerEventSnap.empty ){ 
+            return {data:null, status:"ERROR", message:"Not found event or user"};
+        }
+
+        const orders = []
+
+        sellerEventSnap.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            orders.push( {id: doc.id, data:doc.data()} );
+        });
+
+        return { data: orders, status: 'OK', message : "Success in get orders" }
+    }
+
+    async getAllUserOrders( userID, eventID ){
+        const db = new ConnectDB();
+        const ordersRef = collection(db, "orders");
+
+        const existEventSeller = query( ordersRef, 
+            where('event_id', '==', eventID),
+            where('user_id', '==', userID)
+            );
+        const sellerEventSnap = await getDocs(existEventSeller);
+
         if ( sellerEventSnap.empty ){ //|| userEmailSnap.empty == false){
             return {data:null, status:"ERROR", message:"Not found event or seller"};
         }
@@ -93,24 +119,36 @@ export class OrderDAO {
         const orderRef = doc(db, 'orders', orderID);
         const orderSnap = await getDoc(orderRef);
       
-        if ( orderSnap.exists() ) {
-          const currentStatus = orderSnap.data().status;
+        if ( orderSnap.exists() == false) {
+            return {data:null, status:"ERROR", message:"Order not found"};
+        }
+          //const currentStatus = orderSnap.data().status;
       
           // Verifica se o tipo de status fornecido existe no objeto status atual
-          if (currentStatus.hasOwnProperty(statusType)) {
-            // Cria um objeto de atualização somente para o campo de status fornecido
-            const updateData = {};
-            updateData[`status.${statusType}`] = Date.now();
+        //   if (currentStatus.hasOwnProperty(statusType)) {
+        //     // Cria um objeto de atualização somente para o campo de status fornecido
+        //     const updateData = {};
+        //     updateData[`status.${statusType}`] = Date.now();
       
-            return await orderSnap.update(updateData);
-            // console.log(`Campo ${statusType} atualizado com sucesso.`);
-          } else {
-            // console.log(`O campo de status ${statusType} não existe.`);
-            return null;
-          }
-        } else {
-        //   console.log('Documento não encontrado.');
-            return null;
-        }
+        //     return await orderSnap.update(updateData);
+        //     // console.log(`Campo ${statusType} atualizado com sucesso.`);
+        //   } else {
+        //     // console.log(`O campo de status ${statusType} não existe.`);
+        //     return null;
+        //   }
+        const dataToUpdate = {};
+        dataToUpdate[`status.${statusType}`] = Date.now();
+
+        const result = await updateDoc(orderRef, dataToUpdate)
+        .then( docRef => {
+            return {data: dataToUpdate, status:"OK", message:"Success in update order"}
+        })
+        .catch( error => {
+            if ( error?.message ){
+                return {data:null, status:"ERROR", message:"Failed in update order"}
+            }
+        })
+    
+        return result;
     }
 }

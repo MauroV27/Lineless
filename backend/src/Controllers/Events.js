@@ -62,7 +62,7 @@ export class EventController {
             return res.status(404).json({message:"Product Not Found", data:null, status:"ERROR"});
         }
 
-        res.status(200).json({message:"Get product", data:getProduct, status:"OK"});
+        return res.status(200).json({message:"Get product", data:getProduct, status:"OK"});
     }
 
     /**
@@ -103,7 +103,7 @@ export class EventController {
     async createOrder( req, res ){
 
         const {userID, sellerID, productsList, eventID} = req.body;
-        console.log("aaa :", userID, sellerID, productsList, eventID)
+        
         if ( isStringValue(userID) || isStringValue(sellerID) || isStringValue(eventID) ){//|| isExpectedArray(productsList, 1) ){
             return res.status(500).json({data:null, status:"ERROR", message:"Data entry failure"});
         }
@@ -122,8 +122,28 @@ export class EventController {
      * @param {Request} req 
      * @param {Response} res 
      */
-    getOrder( req, res ){
-        res.status(200).json({message:"Ger order", data:null, status:"OK"});
+    async getOrder( req, res ){
+        const { orderID } = req.body;
+
+        const getOrder = await orderDAO.getOrder( orderID );
+
+        if ( getOrder.data == null ){
+            return res.status(404).json({message:"Order Not Found", data:null, status:"ERROR"});
+        }
+
+        return res.status(200).json({message:"Get order", data:getOrder, status:"OK"});
+    }
+
+    async getAllOrders( req, res ){
+        const { userID, eventID } = req.body;
+
+        const getOrder = await orderDAO.getAllUserOrders( userID, eventID );
+
+        if ( getOrder.data == null ){
+            return res.status(404).json({message:"user or event Not Found", data:null, status:"ERROR"});
+        }
+
+        return res.status(200).json({message:"Get all orders", data:getOrder, status:"OK"});
     }
 
     /**

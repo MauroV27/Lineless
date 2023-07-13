@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal, Header, Item } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import CartItems from './CartItems'
 
@@ -26,6 +27,14 @@ const CartModal = (props) => {
                             Limpar Carrinho
                         </Button>
                         <Header floated='right'>{props.cart.subtotal.formatted_with_symbol}</Header>
+                        <Link to='checkout'>
+                            <Button
+                                color='green'
+                                floated='right'
+                            >
+                                Finalizar Compra
+                            </Button>
+                        </Link>
                     </Modal.Actions>
                 </>
             ) 

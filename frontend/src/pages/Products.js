@@ -8,7 +8,7 @@ export const CartItemsContext = React.createContext()
 
 export function Products() {
 
-    const commerce = new Commerce('pk_test_5307147af62c54c0e4e18e02ec85fe98194c625e31936')
+    const commerce = new Commerce(process.env.REACT_APP_PUBLICKEY_SANDBOX)
 
     const [cart, setCart] = useState()
 
@@ -17,9 +17,9 @@ export function Products() {
             .then(res => {
                 setCart(res)
             })
-    },[commerce.cart])
+    }, [commerce.cart])
 
-    const cartHelperFunctions = { 
+    const cartHelperFunctions = {
 
         deleteItem: (lineItemId) => {
             commerce.cart.remove(lineItemId)
@@ -28,10 +28,10 @@ export function Products() {
                 })
         },
         addQuantity: (lineItemId, newQuantity) => {
-            commerce.cart.update(lineItemId, {quantity: newQuantity})
+            commerce.cart.update(lineItemId, { quantity: newQuantity })
                 .then(res => {
                     setCart(res.cart)
-                    
+
                 })
         },
         subtractQuantity: (lineItemId, newQuantity) => {
@@ -39,7 +39,7 @@ export function Products() {
             if (newQuantity === 0) {
                 cartHelperFunctions.deleteItem(lineItemId)
             } else {
-                commerce.cart.update(lineItemId, {quantity: newQuantity})
+                commerce.cart.update(lineItemId, { quantity: newQuantity })
                     .then(res => {
                         setCart(res.cart)
                     })
@@ -66,21 +66,19 @@ export function Products() {
 
     return (
         <div className="App">
-
             <CartItemsContext.Provider value={cartHelperFunctions}>
-                <Nav cart={cart} emptyCart={emptyCart}/>
+                <Nav cart={cart} emptyCart={emptyCart} />
             </CartItemsContext.Provider>
 
             <Grid centered stackable padded relaxed>
                 <Grid.Column width={9}>
-                    <ProductContainer 
-                        addToCart={addToCart} 
+                    <ProductContainer
+                        addToCart={addToCart}
                     />
                 </Grid.Column>
             </Grid>
-
         </div>
-  );
+    );
 }
 
 

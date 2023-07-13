@@ -1,0 +1,18 @@
+.event-card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-text {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    padding-bottom: 10px;
+}
+
+.event-img{
+    // width:  200px;
+    // height: 200px;
+    object-fit: cover;
+}

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Menu, Image, Icon, Segment, Modal} from 'semantic-ui-react'
 import logo from '../img/logo-h.png'
-
+import { Link } from 'react-router-dom';
 import CartModal from './CartModal'
 
 const Nav = (props) => {
+
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth"})
 
     const iconDisplay = () => {
 
@@ -27,7 +29,9 @@ const Nav = (props) => {
         <Menu className='menu' borderless> 
             <Segment className='nav-segment'>
                 <Menu.Item>
-                    <Image src={logo} size='small' />
+                    <Link to='/'>
+                        <Image src={logo} size='small'/>
+                    </Link>
                 </Menu.Item>
                 <Menu.Item position='right' style={{cursor: 'pointer'}}>
                     <Modal trigger={iconDisplay()} className='cart-modal' closeIcon >

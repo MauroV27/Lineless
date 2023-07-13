@@ -17,7 +17,7 @@ const CartModal = (props) => {
                     </Item.Group>
 
                     <Modal.Actions className='modal-bottom'>
-                        <Button  
+                        <Button
                             basic 
                             negative  
                             floated='left' 

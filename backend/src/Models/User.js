@@ -28,8 +28,8 @@ export class UserDAO {
         
         const result = await addDoc(usersRef, userConstructor)
             .then( doc => {
-                const {name, email, username } = doc.data();
-                const data = {name, email, username, userID: doc.id};
+                // const {name, email, username } = doc.data();
+                const data = {...userConstructor, userID: doc.id};
 
                 return { data, status: 'OK', message : "Success in create user" }
             })

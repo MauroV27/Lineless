@@ -12,6 +12,12 @@ export function isExpectedArray( array, minSize = 0 ){
     return array == null || array == undefined || !Array.isArray(array) || array.length >= minSize ;
 }
 
+export function isPositiveNumber(number){
+    if ( number == null || number == undefined || number == "" || isNaN(number) ) return false; 
+    
+    return number > 0;
+}
+
 
 /**
  * If value is null or undefined, then function returns "" value

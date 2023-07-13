@@ -122,20 +122,7 @@ export class OrderDAO {
         if ( orderSnap.exists() == false) {
             return {data:null, status:"ERROR", message:"Order not found"};
         }
-          //const currentStatus = orderSnap.data().status;
-      
-          // Verifica se o tipo de status fornecido existe no objeto status atual
-        //   if (currentStatus.hasOwnProperty(statusType)) {
-        //     // Cria um objeto de atualização somente para o campo de status fornecido
-        //     const updateData = {};
-        //     updateData[`status.${statusType}`] = Date.now();
-      
-        //     return await orderSnap.update(updateData);
-        //     // console.log(`Campo ${statusType} atualizado com sucesso.`);
-        //   } else {
-        //     // console.log(`O campo de status ${statusType} não existe.`);
-        //     return null;
-        //   }
+
         const dataToUpdate = {};
         dataToUpdate[`status.${statusType}`] = Date.now();
 

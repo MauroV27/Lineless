@@ -55,6 +55,10 @@ export class SellerController{
             return res.status(400).json(order);
         }
 
+        if ( order.data?.seller_id || order.data.seller_id != sellerID ){
+            return res.status(400).json({data:null, status:"ERROR", message:"seller and order not connected."});
+        }
+
         return res.status(200).json(order);
     }
 

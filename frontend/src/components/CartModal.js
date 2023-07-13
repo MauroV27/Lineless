@@ -12,16 +12,16 @@ const CartModal = (props) => {
                     <Item.Group divided>
                         {props.cart.line_items.map(item => (
                             <Item key={item.id}>
-                                <CartItems item={item}/>
+                                <CartItems item={item} />
                             </Item>
                         ))}
                     </Item.Group>
 
                     <Modal.Actions className='modal-bottom'>
                         <Button
-                            basic 
-                            negative  
-                            floated='left' 
+                            basic
+                            negative
+                            floated='left'
                             onClick={props.emptyCart}
                         >
                             Limpar Carrinho
@@ -37,21 +37,21 @@ const CartModal = (props) => {
                         </Link>
                     </Modal.Actions>
                 </>
-            ) 
-            :
-            (
-                <>
-                    <Modal.Header>Carrinho</Modal.Header>
-                    <Modal.Content>
-                        <Modal.Description>
-                            <Header>Seu carrinho está atualmente vazio.</Header>
-                            <p>
-                                Que tal comprar alguma coisa?
-                            </p>
-                        </Modal.Description>
-                    </Modal.Content>
-                </>
             )
+                :
+                (
+                    <>
+                        <Modal.Header>Carrinho</Modal.Header>
+                        <Modal.Content>
+                            <Modal.Description>
+                                <Header>Seu carrinho está atualmente vazio.</Header>
+                                <p>
+                                    Que tal comprar alguma coisa?
+                                </p>
+                            </Modal.Description>
+                        </Modal.Content>
+                    </>
+                )
             }
         </>
     );

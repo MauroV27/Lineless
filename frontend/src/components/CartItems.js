@@ -13,28 +13,28 @@ const CartItems = (props) => {
                 <Item.Header className='cart-item-name'>{props.item.name}</Item.Header>
                 <div className='quantity-group'>
                     <Button
-                        negative 
-                        className='quan-buttons' 
+                        negative
+                        className='quan-buttons'
                         onClick={() => {
                             let newQuantity = props.item.quantity - 1
                             helpFnc.subtractQuantity(props.item.id, newQuantity)
                         }}
-                    > 
-                        <Icon name='minus' /> 
+                    >
+                        <Icon name='minus' />
                     </Button>
-                    <Input 
+                    <Input
                         className='input-quantity'
-                        value={props.item.quantity} 
+                        value={props.item.quantity}
                     />
                     <Button
-                        positive 
+                        positive
                         className='quan-buttons'
                         onClick={() => {
                             let newQuantity = props.item.quantity + 1
                             helpFnc.addQuantity(props.item.id, newQuantity)
                         }}
-                    > 
-                        <Icon name='plus' /> 
+                    >
+                        <Icon name='plus' />
                     </Button>
                 </div>
                 <Item.Extra className='item-total'>

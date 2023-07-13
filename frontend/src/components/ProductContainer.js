@@ -23,7 +23,7 @@ const ProductContainer = (props) => {
             <Grid stackable columns='equal' centered>
                 {products.map(product => (
                     <Grid.Column width={5} key={product.id}>
-                        <ProductCard
+                        <ProductCard 
                             product={product} 
                             addToCart={props.addToCart} 
                         />

@@ -8,7 +8,7 @@ const ProductCard = (props) => {
     }
 
     return (
-        <Card className='product-card'>
+        <Card centered className='product-card'>
             <Image className='product-img' src={props.product.media.source}/>
             <Card.Content>
                 <Card.Header>{props.product.name}</Card.Header>

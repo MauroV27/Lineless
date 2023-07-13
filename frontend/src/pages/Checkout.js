@@ -1,7 +1,6 @@
 import NavHome from '../components/NavHome'
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import eventImg from '../img/festa.jpg';
 import { QRCodeSVG } from 'qrcode.react';
 
 export function Checkout() {
@@ -13,12 +12,13 @@ export function Checkout() {
                 <span style={{ color: '#BE4249', fontSize: '34px', fontFamily: 'SF Pro', fontWeight: 700, lineHeight: '26.56px', wordWrap: 'break-word' }}>Pronto!</span>
                 <br />
                 <br />
-                <span style={{ color: '#1C1C1E', fontSize: '34px', fontFamily: 'SF Pro', fontWeight: 700, lineHeight: '26.56px', wordWrap: 'break-word' }}> Agora basta retirar o produto.</span>
+                <span style={{ color: '#1C1C1E', fontSize: '34px', fontFamily: 'SF Pro', fontWeight: 700, lineHeight: '26.56px', wordWrap: 'break-word' }}>Agora basta retirar o produto.</span>
                 <br />
                 <br />
                 <br />
                 <QRCodeSVG
-                    value={"https://www.youtube.com/watch?v=rA-RgGA_ZyY"}
+                    // mudar value para URL ou texto de pedido 
+                    value={"1 mojito, 2 água, R$12"}
                     size={256}
                     bgColor={"#ffffff"}
                     fgColor={"#000000"}

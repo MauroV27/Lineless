@@ -9,7 +9,6 @@ export const getAllOngoingEvents = async () => {
 };
 
 
-// { username, password }
 export const getEventData  = async (eventID) => {
     return await axios.get(`${URL}`, eventID);
 };

@@ -10,12 +10,12 @@ export function Checkout() {
             <NavHome />
             <div style={{ width: '100%', height: '100%', textAlign: 'center' }}>
                 <span style={{ color: '#BE4249', fontSize: '34px', fontFamily: 'SF Pro', fontWeight: 700, lineHeight: '26.56px', wordWrap: 'break-word' }}>Pronto!</span>
-                <br />
-                <br />
+                <br/>
+                <br/>
                 <span style={{ color: '#1C1C1E', fontSize: '34px', fontFamily: 'SF Pro', fontWeight: 700, lineHeight: '26.56px', wordWrap: 'break-word' }}>Agora basta retirar o produto.</span>
-                <br />
-                <br />
-                <br />
+                <br/>
+                <br/>
+                <br/>
                 <QRCodeSVG
                     // mudar value para URL ou texto de pedido 
                     value={"1 mojito, 2 água, R$12"}
